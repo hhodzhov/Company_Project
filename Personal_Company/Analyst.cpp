@@ -9,6 +9,25 @@ Analyst::Analyst(string full_name, string address, string egn, string hire_date,
 	project_name(_projectname),
 	mails_of_clients(mails) {}
 
+Analyst::Analyst(const Analyst & other)
+{
+	this->full_name = other.full_name;
+	this->address = other.address;
+	this->egn = other.egn;
+	this->hire_date = other.hire_date;
+	this->boss = other.boss;
+	this->position_name = other.position_name;
+	this->level = other.level;
+	this->project_name = other.project_name;
+	this->mails_of_clients = other.mails_of_clients;
+}
+
+Analyst::Analyst() : Employee(),
+	project_name(""),
+	mails_of_clients("")
+{
+}
+
 string Analyst::GetInformation() const
 {
 	ostringstream stream;
@@ -67,5 +86,10 @@ void Analyst::SetLevel(string _level)
 string Analyst::GetLevel() const
 {
 	return level;
+}
+
+string Analyst::GetName() const
+{
+	return this->full_name;
 }
 

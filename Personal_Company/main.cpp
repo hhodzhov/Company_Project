@@ -6,6 +6,8 @@ using namespace std;
 
 static Company company;
 static vector<Analyst> analysts;
+vector<Analyst> analyst_arr;
+
 
 void StoreInformation(string name_of_company, string ceo, string address) {
 	ofstream company_information("company-information.txt", ios::app);
@@ -14,7 +16,7 @@ void StoreInformation(string name_of_company, string ceo, string address) {
 	company_information << "Address of company : " << address << endl;
 }
 
-void EnterInformationForCompany(){
+void EnterInformationForCompany() {
 	string name_of_company, ceo, address;
 	cout << "Enter name of company : ";
 	getline(cin, name_of_company);
@@ -41,11 +43,16 @@ void StoreInformationForAnalysts(string name, string address, string egn, string
 	analysts_information << "Position : " << position << endl;
 	analysts_information << "Level : " << level << endl;
 	analysts_information << "Project name : " << project << endl;
-	analysts_information << "Mails of clients : " << mails;
+	analysts_information << "Mails of clients : " << mails << endl << endl;
 }
-void HireAnalyst() {
-	
-	string name, address, egn, date, boss, position, level, project, mails;
+void SerializeObjectAnalyst(Analyst & analyst) {
+	ofstream analyst_serialize("analyst-serialize.txt", ios::app);
+
+	analyst_serialize << analyst << endl;
+	analyst_serialize.close();
+}
+
+void EnterCommonInformation(string& name, string& address, string& egn, string& date, string& boss, string& position, string& level) {
 	cout << "Enter name :";
 	getline(cin, name);
 	cout << "Enter address ";
@@ -60,11 +67,22 @@ void HireAnalyst() {
 	getline(cin, position);
 	cout << "Enter level : ";
 	getline(cin, level);
+}
+
+void HireAnalyst() {
+
+	string name, address, egn, date, boss, position, level, project, mails;
+	EnterCommonInformation(name, address, egn, date, boss, position, level);
 	cout << "Enter name of project : ";
 	getline(cin, project);
 	cout << "Enter mails of clients in one line" << endl;
 	getline(cin, mails);
-	analysts.push_back(Analyst(name,address,egn,date,boss,position,level,project,mails));
+
+	Analyst current_analyst(name, address, egn, date, boss, position, level, project, mails);
+	//analysts.push_back(a);
+
+	SerializeObjectAnalyst(current_analyst);
+
 	StoreInformationForAnalysts(name, address, egn, date, boss, position, level, project, mails);
 
 }
@@ -77,7 +95,7 @@ void AddEmployeeToStuff() {
 	cin >> option;
 	cin.ignore();
 	switch (option) {
-	case 1 :
+	case 1:
 		HireAnalyst(); break;
 	}
 }
@@ -88,6 +106,26 @@ void ShowInformationForAllAnalysts() {
 		getline(read_information_all_analysts, current_line);
 		cout << current_line << endl;
 	}
+
+}
+void LoadInformation() {
+	
+}
+void DeserializeObjectAnalyst() {
+	
+	ifstream deserialize_analyst("analyst-serialize.txt");
+
+	while (!deserialize_analyst.eof()) {
+		Analyst current;
+		deserialize_analyst >> current;
+		analyst_arr.push_back(current);
+	}
+
+	for (size_t i = 0; i < analyst_arr.size() - 1; i++)
+	{
+		cout << analyst_arr[i].GetInformation() << endl;
+	}
+
 }
 void ShowInformationForEmployeesForCertainPosition() {
 	cout << "-----Choose position to see information-----" << endl << endl;
@@ -97,8 +135,49 @@ void ShowInformationForEmployeesForCertainPosition() {
 	size_t operation;
 	cin >> operation;
 	switch (operation) {
-	case 1 : 
-		ShowInformationForAllAnalysts();
+	case 1:
+		//ShowInformationForAllAnalysts();
+		DeserializeObjectAnalyst();
+	}
+}
+
+void ShowInformationForCertainAnalyst() {
+
+	cout << "----------All analysts in the company----------" << endl << endl;
+	ifstream deserialize_analyst("analyst-serialize.txt");
+	vector<Analyst> current_analysts;
+	while (!deserialize_analyst.eof()) {
+		Analyst current;
+		deserialize_analyst >> current;
+		current_analysts.push_back(current);
+	}
+
+	for (size_t i = 0; i < current_analysts.size() - 1; i++)
+	{
+		cout << current_analysts[i].GetName() << endl;
+	}
+
+	string analyst_to_choose;
+	cin.ignore();
+	getline(cin, analyst_to_choose);
+	cout << "----------Information for " << analyst_to_choose << "----------" << endl << endl;
+	for (size_t i = 0; i < current_analysts.size(); i++)
+	{
+		if (current_analysts[i].GetName() == analyst_to_choose) {
+			cout << current_analysts[i].GetInformation() << endl;
+		}
+	}
+}
+void ShowInformationForCertainEmployee() {
+	cout << "-----Choose position to see information-----" << endl << endl;
+	cout << "1 - Analyst" << endl
+		<< "2 - Programmer" << endl
+		<< "3 - Leader" << endl;
+	size_t operation;
+	cin >> operation;
+	switch (operation) {
+	case 1 :
+		ShowInformationForCertainAnalyst(); break;
 	}
 }
 
@@ -123,6 +202,8 @@ int main() {
 	*/
 	size_t operation;
 
+	//LoadInformation();
+
 	do {
 		cout << "---------------MAIN MENU----------------" << endl << endl;
 		cout << "1 - Enter information for company" << endl
@@ -142,11 +223,13 @@ int main() {
 			GetInformationForCompany(); break;
 		case 3:
 			AddEmployeeToStuff(); break;
-		case 6 :
-			ShowInformationForEmployeesForCertainPosition();
+		case 4:
+			ShowInformationForCertainEmployee(); break;
+		case 6:
+			ShowInformationForEmployeesForCertainPosition(); break;
 		}
 
-	
+
 
 	} while (operation != 0);
 	system("pause");

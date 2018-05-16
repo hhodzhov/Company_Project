@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="Analyst.cpp" />
     <ClCompile Include="Company.cpp" />
+    <ClCompile Include="Employee.cpp" />
     <ClCompile Include="Leader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Programmer.cpp" />

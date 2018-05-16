@@ -5,11 +5,15 @@
 #include<string>
 #include<sstream>
 #include<vector>
+#include<ostream>
+#include<istream>
 using std::string;
 using std::cout;
 using std::endl;
 using std::ostringstream;
 using std::vector;
+using std::ostream;
+using std::istream;
 class Employee {
 protected:
 	string full_name;
@@ -29,6 +33,7 @@ public:
 		boss(_boss),
 		position_name(_position_name),
 		level(_level) {}
+	Employee();
 
 	virtual void AddNewEmployee() = 0;
 	virtual void FireEmployee() = 0;
@@ -42,22 +47,25 @@ public:
 	virtual void ChangeInformation() = 0;
 	virtual void SetLevel(string _level) = 0;
 	virtual string GetLevel()  const = 0;
+	virtual string GetName() const = 0;
 };
 
 class Leader : public virtual Employee {
 	string project_name;
-	vector<string> mails_of_clients;
+	string mails_of_clients;
 
 public:
 
-	Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name, string level, string _projectname, vector<string> mails);
+	Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name, 
+		string level, string _projectname, string mails);
+	Leader();
 	string GetInformation() const override;
 	void AddNewEmployee();
 	void FireEmployee();
 	void ChangeInformation() override;
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
-
+	string GetName() const override;
 };
 class Programmer : public virtual Employee {
 	string project_name;
@@ -74,7 +82,7 @@ public:
 	void ChangeInformation() override;
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
-
+	string GetName() const override;
 };
 
 class Analyst : public virtual Employee {
@@ -85,6 +93,8 @@ public:
 
 	Analyst(string full_name, string address, string egn, string hire_date, string boss,
 		string position_name, string level, string _projectname,string mails);
+	Analyst(const Analyst& other);
+	Analyst();
 	string GetInformation() const override;
 	string GetProjectName() const;
 	void SetProjectName(string name_of_project);
@@ -95,6 +105,9 @@ public:
 	void ChangeInformation();
 	void SetLevel(string _level);
 	string GetLevel() const;
+	string GetName() const override;
+	friend ostream & operator << (ostream& out, const Analyst& analyst);
+	friend istream & operator >> (istream& in, Analyst& analyst);
 };
 
 

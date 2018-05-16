@@ -48,3 +48,8 @@ string Programmer::GetLevel() const
 	return level;
 }
 
+string Programmer::GetName() const
+{
+	return this->full_name;
+}
+
