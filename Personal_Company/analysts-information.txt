@@ -538,3 +538,13 @@ Level : jk
 Project name : jk
 Mails of clients : jk
 
+Full Name : er
+Address : er
+EGN : er
+Date of hiring : er
+Boss : er
+Position : er
+Level : er
+Project name : er
+Mails of clients : er
+

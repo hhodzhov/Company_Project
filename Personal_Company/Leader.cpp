@@ -4,8 +4,8 @@
 using std::vector;
 using std::ostringstream;
 
-Leader::Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name, string level,
-	string _projectname, string mails) :
+Leader::Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name,
+	string level, string _projectname, string mails) :
 	Employee(full_name, address, egn, hire_date, boss, position_name, level),
 	project_name(_projectname),
 	mails_of_clients(mails) {}
@@ -50,4 +50,11 @@ string Leader::GetLevel() const
 string Leader::GetName() const
 {
 	return this->full_name;
+}
+
+bool Leader::operator!=(Leader & other)
+{
+	return this->full_name != other.full_name && this->address != other.address && this->egn != other.egn
+		&& this->hire_date != other.hire_date && this->boss != other.boss  && this->position_name != other.position_name
+		&& this->level != other.level && this->project_name != other.project_name && this->mails_of_clients != other.mails_of_clients;
 }

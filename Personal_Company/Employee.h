@@ -56,7 +56,7 @@ class Leader : public virtual Employee {
 
 public:
 
-	Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name, 
+	Leader(string full_name, string address, string egn, string hire_date, string boss, string position_name,
 		string level, string _projectname, string mails);
 	Leader();
 	string GetInformation() const override;
@@ -66,6 +66,9 @@ public:
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
 	string GetName() const override;
+	friend ostream & operator << (ostream& out, const Leader& leader);
+	friend istream & operator >> (istream& in, Leader& leader);
+	bool operator != (Leader& other);
 };
 class Programmer : public virtual Employee {
 	string project_name;
@@ -110,7 +113,5 @@ public:
 	friend istream & operator >> (istream& in, Analyst& analyst);
 	bool operator != (Analyst& other);
 };
-
-
 
 #endif // !PERSONAL_COMPANY
