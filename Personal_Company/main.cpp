@@ -5,8 +5,8 @@
 using namespace std;
 
 static Company company;
-static vector<Analyst> analysts;
-vector<Analyst> analyst_arr;
+vector<Analyst> analysts;
+static vector<Analyst> analyst_arr;
 
 
 void StoreInformation(string name_of_company, string ceo, string address) {
@@ -48,7 +48,7 @@ void StoreInformationForAnalysts(string name, string address, string egn, string
 void SerializeObjectAnalyst(Analyst & analyst) {
 	ofstream analyst_serialize("analyst-serialize.txt", ios::app);
 
-	analyst_serialize << analyst << endl;
+	analyst_serialize << endl << analyst;
 	analyst_serialize.close();
 }
 
@@ -79,7 +79,8 @@ void HireAnalyst() {
 	getline(cin, mails);
 
 	Analyst current_analyst(name, address, egn, date, boss, position, level, project, mails);
-	//analysts.push_back(a);
+	//analysts.push_back(current_analyst);
+	analyst_arr.push_back(current_analyst);
 
 	SerializeObjectAnalyst(current_analyst);
 
@@ -108,24 +109,69 @@ void ShowInformationForAllAnalysts() {
 	}
 
 }
-void LoadInformation() {
-	
-}
-void DeserializeObjectAnalyst() {
-	
-	ifstream deserialize_analyst("analyst-serialize.txt");
 
+void LoadInformation() {
+	ifstream deserialize_analyst("analyst-serialize.txt");
+	int index = 0;
 	while (!deserialize_analyst.eof()) {
 		Analyst current;
 		deserialize_analyst >> current;
+		
 		analyst_arr.push_back(current);
-	}
 
-	for (size_t i = 0; i < analyst_arr.size() - 1; i++)
+	}
+}
+void ShowAllAnalystsNames() {
+	for (size_t i = 0; i < analyst_arr.size(); i++)
+	{
+		cout << analyst_arr[i].GetName() << endl;
+	}
+}
+void ShowAllAnalystsInformation() {
+	for (size_t i = 0; i < analyst_arr.size() ; i++)
 	{
 		cout << analyst_arr[i].GetInformation() << endl;
 	}
+}
+void MoveToAnalystArr() {
+	int count;
+	for (size_t i = 0; i < analysts.size(); i++)
+	{
+		count = 0;
+		for (size_t j = 0; j < analyst_arr.size(); j++)
+		{
+			if (analyst_arr[j] != analysts[i]) {
+				count++;
+			}
+		}
+		cout << "Count is : " << count << endl;
+		cout << "Analyst_arr.size() is " << analyst_arr.size() << endl;
+		cout << "Vec size is : " << analysts.size() << endl;
+		if (count == analyst_arr.size() - 1) {
+			analyst_arr.push_back(analysts[i]);
+		}
 
+	}
+	/*for (size_t i = 0; i < analysts.size(); i++)
+	{
+		analyst_arr.push_back(analysts[i]);
+	}*/
+
+}
+void DeserializeObjectAnalyst() {
+
+	//LoadInformation();
+
+	/*for (size_t i = 0; i < analyst_arr.size() - 1; i++)
+	{
+		cout << analyst_arr[i].GetInformation() << endl;
+	}*/
+	//ShowAllAnalystsNames();
+	if (analysts.size() != 0) {
+		cout << "ASDASDASDASD";
+		MoveToAnalystArr();
+	}
+	ShowAllAnalystsInformation();
 }
 void ShowInformationForEmployeesForCertainPosition() {
 	cout << "-----Choose position to see information-----" << endl << endl;
@@ -137,9 +183,10 @@ void ShowInformationForEmployeesForCertainPosition() {
 	switch (operation) {
 	case 1:
 		//ShowInformationForAllAnalysts();
-		DeserializeObjectAnalyst();
+		DeserializeObjectAnalyst(); break;
 	}
 }
+
 
 void ShowInformationForCertainAnalyst() {
 
@@ -152,10 +199,11 @@ void ShowInformationForCertainAnalyst() {
 		current_analysts.push_back(current);
 	}
 
-	for (size_t i = 0; i < current_analysts.size() - 1; i++)
+	/*for (size_t i = 0; i < current_analysts.size() - 1; i++)
 	{
 		cout << current_analysts[i].GetName() << endl;
-	}
+	}*/
+	ShowAllAnalystsNames();
 
 	string analyst_to_choose;
 	cin.ignore();
@@ -176,8 +224,90 @@ void ShowInformationForCertainEmployee() {
 	size_t operation;
 	cin >> operation;
 	switch (operation) {
-	case 1 :
+	case 1:
 		ShowInformationForCertainAnalyst(); break;
+	}
+}
+void ReSerialize(vector<Analyst> vec, string file_name) {
+	ofstream reserialize_employees(file_name, ios::out);
+
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		if (i == vec.size() - 1) {
+			reserialize_employees << vec[i];
+		}
+		else {
+			reserialize_employees << vec[i] << endl;
+
+		}
+	}
+}
+void FireAnalysts() {
+	cout << "----------All analysts in the company----------" << endl << endl;
+	ShowAllAnalystsNames();
+
+	string analyst_to_fire;
+	cin.ignore();
+	getline(cin, analyst_to_fire);
+	for (size_t i = 0; i < analyst_arr.size(); i++)
+	{
+		if (analyst_arr[i].GetName() == analyst_to_fire) {
+			analyst_arr.erase(analyst_arr.begin() + i);
+		}
+	}
+	ReSerialize(analyst_arr, "analyst-serialize.txt");
+}
+
+void FireEmployees() {
+	cout << "-----Choose position-----" << endl << endl;
+	cout << "1 - Analyst" << endl
+		<< "2 - Programmer" << endl
+		<< "3 - Leader" << endl;
+	size_t operation;
+	cin >> operation;
+	switch (operation) {
+	case 1:
+		FireAnalysts(); break;
+	}
+}
+Analyst ChangedInformation(Analyst& current_analyst) {
+
+	string name, address, egn, date, boss, position, level, project, mails;
+	EnterCommonInformation(name, address, egn, date, boss, position, level);
+	cout << "Enter name of project : ";
+	getline(cin, project);
+	cout << "Enter mails of clients in one line" << endl;
+	getline(cin, mails);
+	Analyst updated(name, address, egn, date, boss, position, level, project, mails);
+
+	return updated;
+}
+void ChangeAnalystsData() {
+	ShowAllAnalystsNames();
+
+	string analyst_to_change_information;
+	cin.ignore();
+	getline(cin, analyst_to_change_information);
+
+	for (size_t i = 0; i < analyst_arr.size(); i++)
+	{
+		if (analyst_arr[i].GetName() == analyst_to_change_information) {
+			analyst_arr[i] = ChangedInformation(analyst_arr[i]);
+		}
+	}
+	ReSerialize(analyst_arr, "analyst-serialize.txt");
+}
+
+void ChangeEmployeesData() {
+	cout << "-----Choose position-----" << endl << endl;
+	cout << "1 - Analyst" << endl
+		<< "2 - Programmer" << endl
+		<< "3 - Leader" << endl;
+	size_t operation;
+	cin >> operation;
+	switch (operation) {
+	case 1:
+		ChangeAnalystsData();
 	}
 }
 
@@ -201,8 +331,8 @@ int main() {
 	cout << endl;
 	*/
 	size_t operation;
-
-	//LoadInformation();
+	//DeserializeObjectAnalyst();
+	LoadInformation();
 
 	do {
 		cout << "---------------MAIN MENU----------------" << endl << endl;
@@ -225,11 +355,25 @@ int main() {
 			AddEmployeeToStuff(); break;
 		case 4:
 			ShowInformationForCertainEmployee(); break;
+		case 5:
+			FireEmployees(); break;
 		case 6:
 			ShowInformationForEmployeesForCertainPosition(); break;
+		case 7:
+			ChangeEmployeesData(); break;
+		case 8:
+			cout << "Printing current Analyst" << endl;
+			for (size_t i = 0; i < analysts.size(); i++)
+			{
+				cout << analysts[i] << endl;
+			} break;
+		case 9:
+			cout << "Printing current Analyst_Arr" << endl;
+			for (size_t i = 0; i < analyst_arr.size(); i++)
+			{
+				cout << analyst_arr[i] << endl;
+			}break;
 		}
-
-
 
 	} while (operation != 0);
 	system("pause");

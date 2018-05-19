@@ -108,6 +108,7 @@ public:
 	string GetName() const override;
 	friend ostream & operator << (ostream& out, const Analyst& analyst);
 	friend istream & operator >> (istream& in, Analyst& analyst);
+	bool operator != (Analyst& other);
 };
 
 

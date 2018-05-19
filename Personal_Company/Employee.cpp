@@ -15,7 +15,7 @@ ostream & operator<<(ostream & out, const Analyst & analyst)
 {
 	out << analyst.full_name << endl << analyst.address << endl << analyst.egn << endl << analyst.hire_date << endl
 		<< analyst.boss << endl << analyst.position_name << endl << analyst.level << endl
-		<< analyst.project_name << endl << analyst.mails_of_clients << endl;
+		<< analyst.project_name << endl << analyst.mails_of_clients;
 	return out;
 }
 

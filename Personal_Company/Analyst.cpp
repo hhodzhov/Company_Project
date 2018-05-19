@@ -93,3 +93,10 @@ string Analyst::GetName() const
 	return this->full_name;
 }
 
+bool Analyst::operator!=(Analyst & other)
+{
+	return this->full_name != other.full_name && this->address != other.address && this->egn != other.egn
+		&& this->hire_date != other.hire_date && this->boss != other.boss  && this->position_name != other.position_name
+		&& this->level != other.level && this->project_name != other.project_name && this->mails_of_clients != other.mails_of_clients;
+}
+
