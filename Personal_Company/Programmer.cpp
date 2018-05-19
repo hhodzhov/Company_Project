@@ -9,6 +9,11 @@ Programmer::Programmer(string full_name, string address, string egn, string hire
 	Employee(full_name, address, egn, hire_date, boss, position_name, level),
 	project_name(_projectname) {}
 
+Programmer::Programmer() : Employee(),
+	project_name("")
+{
+}
+
 string Programmer::GetInformation() const
 {
 	ostringstream stream;
@@ -51,5 +56,12 @@ string Programmer::GetLevel() const
 string Programmer::GetName() const
 {
 	return this->full_name;
+}
+
+bool Programmer::operator!=(Programmer & other)
+{
+	return this->full_name != other.full_name && this->address != other.address && this->egn != other.egn
+		&& this->hire_date != other.hire_date && this->boss != other.boss  && this->position_name != other.position_name
+		&& this->level != other.level && this->project_name != other.project_name;
 }
 

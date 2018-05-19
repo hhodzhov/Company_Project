@@ -17,8 +17,4 @@ public:
 	void SetAddress(string address);
 	string GetInformationForCompany() const;
 };
-
-
-
-
 #endif // COMPANY

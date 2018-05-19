@@ -77,6 +77,7 @@ public:
 
 	Programmer(string full_name, string address, string egn, string hire_date, string boss,
 		string position_name, string level, string _projectname);
+	Programmer();
 	string GetInformation() const override;
 	void SetProjectName(string name_of_project);
 	string GetProjectName();
@@ -86,6 +87,9 @@ public:
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
 	string GetName() const override;
+	friend ostream & operator << (ostream& out, const Programmer& programmer);
+	friend istream & operator >> (istream& in, Programmer& programmer);
+	bool operator != (Programmer& other);
 };
 
 class Analyst : public virtual Employee {

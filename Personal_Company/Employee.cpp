@@ -26,6 +26,21 @@ istream & operator >> (istream & in, Leader & leader)
 	return in;
 }
 
+ostream & operator<<(ostream & out, const Programmer & programmer)
+{
+	out << programmer.full_name << endl << programmer.address << endl << programmer.egn << endl << programmer.hire_date << endl
+		<< programmer.boss << endl << programmer.position_name << endl << programmer.level << endl
+		<< programmer.project_name << endl;
+	return out;
+}
+
+istream & operator >> (istream & in, Programmer & programmer)
+{
+	in >> programmer.full_name >> programmer.address >> programmer.egn >> programmer.hire_date >> programmer.boss
+		>> programmer.position_name >> programmer.level >> programmer.project_name;
+	return in;
+}
+
 ostream & operator<<(ostream & out, const Analyst & analyst)
 {
 	out << analyst.full_name << endl << analyst.address << endl << analyst.egn << endl << analyst.hire_date << endl

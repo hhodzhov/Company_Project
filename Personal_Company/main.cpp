@@ -8,6 +8,7 @@ static Company company;
 vector<Analyst> analysts;
 static vector<Analyst> analyst_arr;
 static vector<Leader> leader_arr;
+static vector<Programmer> programmer_arr;
 
 
 void StoreInformation(string name_of_company, string ceo, string address) {
@@ -32,6 +33,7 @@ void EnterInformationForCompany() {
 void GetInformationForCompany() {
 	cout << company.GetInformationForCompany() << endl;
 }
+/*
 void StoreInformationForAnalysts(string name, string address, string egn, string date,
 	string boss, string position, string level, string project, string mails) {
 
@@ -46,6 +48,7 @@ void StoreInformationForAnalysts(string name, string address, string egn, string
 	analysts_information << "Project name : " << project << endl;
 	analysts_information << "Mails of clients : " << mails << endl << endl;
 }
+*/
 void SerializeObjectAnalyst(Analyst & analyst) {
 	ofstream analyst_serialize("analyst-serialize.txt", ios::app);
 
@@ -85,7 +88,7 @@ void HireAnalyst() {
 
 	SerializeObjectAnalyst(current_analyst);
 
-	StoreInformationForAnalysts(name, address, egn, date, boss, position, level, project, mails);
+	//StoreInformationForAnalysts(name, address, egn, date, boss, position, level, project, mails);
 
 }
 void SerializeObjectLeader(Leader& leader) {
@@ -106,6 +109,22 @@ void HireLeader() {
 	SerializeObjectLeader(current_leader);
 
 }
+void SerializeObjectProgrammer(Programmer& programmer) {
+	ofstream programmer_serialize("programmer-serialize.txt", ios::app);
+	programmer_serialize << programmer;
+	programmer_serialize.close();
+
+}
+void HireProgrammer() {
+	string name, address, egn, date, boss, position, level, project;
+	EnterCommonInformation(name, address, egn, date, boss, position, level);
+	cout << "Enter name of project : ";
+	getline(cin, project);
+	Programmer current_programmer(name, address, egn, date, boss, position, level, project);
+	programmer_arr.push_back(current_programmer);
+	
+	SerializeObjectProgrammer(current_programmer);
+}
 void AddEmployeeToStuff() {
 	cout << "-----What kind of employee do you want to hire-----" << endl << endl;
 	cout << "1 - Analyst" << endl
@@ -117,6 +136,8 @@ void AddEmployeeToStuff() {
 	switch (option) {
 	case 1:
 		HireAnalyst(); break;
+	case 2: 
+		HireProgrammer(); break;
 	case 3: 
 		HireLeader(); break;
 	}
@@ -148,10 +169,18 @@ void LoadLeaders() {
 	}
 }
 
+void LoadProgrammers() {
+	ifstream deserialize_programmers("programmer-serialize.txt");
+	while (!deserialize_programmers.eof()) {
+		Programmer current;
+		deserialize_programmers >> current;
+		programmer_arr.push_back(current);
+	}
+}
 void LoadInformation() {
 	LoadAnalysts();
 	LoadLeaders();
-	
+	LoadProgrammers();
 }
 void ShowAllAnalystsNames() {
 	for (size_t i = 0; i < analyst_arr.size(); i++)
@@ -182,27 +211,14 @@ void MoveToAnalystArr() {
 		if (count == analyst_arr.size() - 1) {
 			analyst_arr.push_back(analysts[i]);
 		}
-
 	}
-	/*for (size_t i = 0; i < analysts.size(); i++)
-	{
-		analyst_arr.push_back(analysts[i]);
-	}*/
-
 }
 void DeserializeObjectAnalyst() {
 
-	//LoadInformation();
-
-	/*for (size_t i = 0; i < analyst_arr.size() - 1; i++)
-	{
-		cout << analyst_arr[i].GetInformation() << endl;
-	}*/
-	//ShowAllAnalystsNames();
-	if (analysts.size() != 0) {
+	/*if (analysts.size() != 0) {
 		cout << "ASDASDASDASD";
 		MoveToAnalystArr();
-	}
+	}*/
 	ShowAllAnalystsInformation();
 }
 void ShowAllLeadersInformation() {
@@ -214,6 +230,15 @@ void ShowAllLeadersInformation() {
 void DeserializeObjectLeader() {
 	ShowAllLeadersInformation();
 }
+void ShowAllProgrammersInformation() {
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		cout << programmer_arr[i].GetInformation() << endl;
+	}
+}
+void DeserializeObjectProgrammer() {
+	ShowAllProgrammersInformation();
+}
 void ShowInformationForEmployeesForCertainPosition() {
 	cout << "-----Choose position to see information-----" << endl << endl;
 	cout << "1 - Analyst" << endl
@@ -223,8 +248,9 @@ void ShowInformationForEmployeesForCertainPosition() {
 	cin >> operation;
 	switch (operation) {
 	case 1:
-		//ShowInformationForAllAnalysts();
 		DeserializeObjectAnalyst(); break;
+	case 2: 
+		DeserializeObjectProgrammer(); break;
 	case 3: 
 		DeserializeObjectLeader(); break;
 	}
@@ -246,33 +272,6 @@ void ShowInformationForCertainAnalyst() {
 	cin.ignore();
 	getline(cin, analyst_to_chose);
 	ShowInfoForSelectedAnalyst(analyst_to_chose);
-
-
-	/*cout << "----------All analysts in the company----------" << endl << endl;
-	ifstream deserialize_analyst("analyst-serialize.txt");
-	vector<Analyst> current_analysts;
-	while (!deserialize_analyst.eof()) {
-		Analyst current;
-		deserialize_analyst >> current;
-		current_analysts.push_back(current);
-	}*/
-
-	/*for (size_t i = 0; i < current_analysts.size() - 1; i++)
-	{
-		cout << current_analysts[i].GetName() << endl;
-	}*/
-	/*ShowAllAnalystsNames();
-
-	string analyst_to_choose;
-	cin.ignore();
-	getline(cin, analyst_to_choose);
-	cout << "----------Information for " << analyst_to_choose << "----------" << endl << endl;
-	for (size_t i = 0; i < current_analysts.size(); i++)
-	{
-		if (current_analysts[i].GetName() == analyst_to_choose) {
-			cout << current_analysts[i].GetInformation() << endl;
-		}
-	}*/
 }
 void ShowAllLeadersNames() {
 	for (size_t i = 0; i < leader_arr.size(); i++)
@@ -298,6 +297,31 @@ void ShowInformationForCertainLeader() {
 	ShowInfoForSelectedLeader(leader_to_chose);
 }
 
+void ShowAllProgrammersName() {
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		cout << programmer_arr[i].GetName() << endl;
+	}
+}
+
+void ShowInfoForSelectedProgrammer(string selected_programmer) {
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		if (programmer_arr[i].GetName() == selected_programmer) {
+			cout << programmer_arr[i].GetInformation() << endl;
+		}
+	}
+}
+
+void ShowInformationForCertainProgrammer() {
+	cout << "----------All programmers in the company----------" << endl << endl;
+	ShowAllProgrammersName();
+	string programmer_to_choose;
+	cin.ignore();
+	getline(cin, programmer_to_choose);
+	ShowInfoForSelectedProgrammer(programmer_to_choose);
+}
+
 void ShowInformationForCertainEmployee() {
 	cout << "-----Choose position to see information-----" << endl << endl;
 	cout << "1 - Analyst" << endl
@@ -308,6 +332,7 @@ void ShowInformationForCertainEmployee() {
 	switch (operation) {
 	case 1:
 		ShowInformationForCertainAnalyst(); break;
+	case 2: ShowInformationForCertainProgrammer(); break;
 	case 3:
 		ShowInformationForCertainLeader(); break;
 	}
@@ -365,6 +390,30 @@ void FireLeaders() {
 	ReSerializeLeaders(leader_arr, "leader-serialize.txt");
 }
 
+void ReSerializeProgrammers(vector<Programmer> vec, string filename) {
+	ofstream reserialize_employees(filename, ios::out);
+
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		reserialize_employees << vec[i];
+	}
+}
+
+void FireProgrammers() {
+	cout << "----------All programmers in the company----------" << endl << endl;
+	ShowAllProgrammersName();
+	string programmer_to_fire;
+	cin.ignore();
+	getline(cin, programmer_to_fire);
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		if (programmer_arr[i].GetName() == programmer_to_fire) {
+			programmer_arr.erase(programmer_arr.begin() + i);
+		}
+	}
+	ReSerializeProgrammers(programmer_arr, "programmer-serialize.txt");
+}
+
 void FireEmployees() {
 	cout << "-----Choose position-----" << endl << endl;
 	cout << "1 - Analyst" << endl
@@ -375,6 +424,7 @@ void FireEmployees() {
 	switch (operation) {
 	case 1:
 		FireAnalysts(); break;
+	case 2: FireProgrammers(); break;
 	case 3:
 		FireLeaders(); break;
 	}
@@ -433,6 +483,32 @@ void ChangeLeadersData() {
 	ReSerializeLeaders(leader_arr, "leader-serialize.txt");
 }
 
+Programmer ChangeProgrammerInformation() {
+
+	string name, address, egn, date, boss, position, level, project;
+	EnterCommonInformation(name, address, egn, date, boss, position, level);
+	cout << "Enter name of project : ";
+	getline(cin, project);
+	
+	Programmer updated(name, address, egn, date, boss, position, level, project);
+
+	return updated;
+}
+
+void ChangeProgrammersData() {
+	ShowAllProgrammersName();
+	string programmer_to_change_information;
+	cin.ignore();
+	getline(cin, programmer_to_change_information);
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		if (programmer_arr[i].GetName() == programmer_to_change_information) {
+			programmer_arr[i] = ChangeProgrammerInformation();
+		}
+	}
+	ReSerializeProgrammers(programmer_arr, "programmer-serialize.txt");
+}
+
 void ChangeEmployeesData() {
 	cout << "-----Choose position-----" << endl << endl;
 	cout << "1 - Analyst" << endl
@@ -443,6 +519,8 @@ void ChangeEmployeesData() {
 	switch (operation) {
 	case 1:
 		ChangeAnalystsData(); break;
+	case 2:
+		ChangeProgrammersData(); break;
 	case 3:
 		ChangeLeadersData(); break;
 	}
