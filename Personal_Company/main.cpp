@@ -2,6 +2,7 @@
 #include<fstream>
 #include"Employee.h"
 #include"Company.h"
+#include"Teams.h"
 using namespace std;
 
 static Company company;
@@ -9,7 +10,7 @@ vector<Analyst> analysts;
 static vector<Analyst> analyst_arr;
 static vector<Leader> leader_arr;
 static vector<Programmer> programmer_arr;
-
+static vector<Teams> teams_arr;
 
 void StoreInformation(string name_of_company, string ceo, string address) {
 	ofstream company_information("company-information.txt", ios::app);
@@ -105,7 +106,7 @@ void HireLeader() {
 	getline(cin, mails);
 	Leader current_leader(name, address, egn, date, boss, position, level, project, mails);
 	leader_arr.push_back(current_leader);
-	
+
 	SerializeObjectLeader(current_leader);
 
 }
@@ -122,7 +123,7 @@ void HireProgrammer() {
 	getline(cin, project);
 	Programmer current_programmer(name, address, egn, date, boss, position, level, project);
 	programmer_arr.push_back(current_programmer);
-	
+
 	SerializeObjectProgrammer(current_programmer);
 }
 void AddEmployeeToStuff() {
@@ -136,9 +137,9 @@ void AddEmployeeToStuff() {
 	switch (option) {
 	case 1:
 		HireAnalyst(); break;
-	case 2: 
+	case 2:
 		HireProgrammer(); break;
-	case 3: 
+	case 3:
 		HireLeader(); break;
 	}
 }
@@ -189,7 +190,7 @@ void ShowAllAnalystsNames() {
 	}
 }
 void ShowAllAnalystsInformation() {
-	for (size_t i = 0; i < analyst_arr.size() ; i++)
+	for (size_t i = 0; i < analyst_arr.size(); i++)
 	{
 		cout << analyst_arr[i].GetInformation() << endl;
 	}
@@ -249,12 +250,12 @@ void ShowInformationForEmployeesForCertainPosition() {
 	switch (operation) {
 	case 1:
 		DeserializeObjectAnalyst(); break;
-	case 2: 
+	case 2:
 		DeserializeObjectProgrammer(); break;
-	case 3: 
+	case 3:
 		DeserializeObjectLeader(); break;
 	}
-	
+
 }
 void ShowInfoForSelectedAnalyst(string& selected) {
 	for (size_t i = 0; i < analyst_arr.size(); i++)
@@ -371,7 +372,7 @@ void ReSerializeLeaders(vector<Leader> vec, string filename) {
 
 	for (size_t i = 0; i < vec.size(); i++)
 	{
-			reserialize_employees << vec[i];
+		reserialize_employees << vec[i];
 	}
 }
 
@@ -489,7 +490,7 @@ Programmer ChangeProgrammerInformation() {
 	EnterCommonInformation(name, address, egn, date, boss, position, level);
 	cout << "Enter name of project : ";
 	getline(cin, project);
-	
+
 	Programmer updated(name, address, egn, date, boss, position, level, project);
 
 	return updated;
@@ -526,6 +527,142 @@ void ChangeEmployeesData() {
 	}
 }
 
+
+
+//TODO :: you can make global variable in main.cpp vector<Employee> employees_arr, and in every adding
+//add current type of employee in this variable
+//then in this function just employees_arr[i].GetName() i vsichko tochno
+vector<string> GetAllEmployees() {
+	vector<string> all;
+	for (size_t i = 0; i < analyst_arr.size(); i++)
+	{
+		all.push_back(analyst_arr[i].GetName());
+	}
+	for (size_t i = 0; i < leader_arr.size(); i++)
+	{
+		all.push_back(leader_arr[i].GetName());
+	}
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		all.push_back(programmer_arr[i].GetName());
+	}
+	return all;
+}
+
+void ShowProgrammers() {
+	cout << "----All programmers----" << endl;
+	for (size_t i = 0; i < programmer_arr.size(); i++)
+	{
+		cout << programmer_arr[i].GetName() << endl;
+	}
+}
+
+void ShowAnalysts() {
+	cout << "----All analysts----" << endl;
+	for (size_t i = 0; i < analyst_arr.size(); i++)
+	{
+		cout << analyst_arr[i].GetName() << endl;
+	}
+}
+
+void ShowLeaders() {
+	cout << "----All leaders----" << endl;
+	for (size_t i = 0; i < leader_arr.size(); i++)
+	{
+		cout << leader_arr[i].GetName() << endl;
+	}
+}
+
+
+void ShowAllEmployees() {
+	vector<string> all_employees = GetAllEmployees();
+	cout << "----------All employees in the company----------" << endl << endl;
+	/*	for (size_t i = 0; i < all_employees.size(); i++)
+		{
+			cout << all_employees[i] << endl;
+		}*/
+	ShowProgrammers();
+	ShowAnalysts();
+	ShowLeaders();
+}
+
+void AddParticipantsToCurrentTeam(vector<string>& members) {
+
+	cout << "Enter employee name : ";
+	string to_add;
+
+	bool stay_in = true;
+	string end;
+	while (stay_in) {
+
+		getline(cin, to_add);
+		if (to_add == "end") {
+			stay_in = false;
+		}
+		else {
+			members.push_back(to_add);
+			//getline(cin, to_add);
+		}
+	}
+	/*cout << "Enter 'next' to continue or 'end' to stop" << endl;
+	cin >> end;
+	if (end == "end") {
+		stay_in = false;
+	}
+	else {
+		members.push_back(to_add);
+		getline(cin, to_add);
+	}*/
+}
+void LoadInformationForTeams() {
+	ifstream deserialize_teams("teams-serialize.txt");
+
+	while (!deserialize_teams.eof()) {
+		Teams current;
+		deserialize_teams >> current;
+		if (current.isNull()) {
+			break;
+		}
+		else {
+			teams_arr.push_back(current);
+		}
+	}
+}
+
+void SerializeObjectTeams(Teams& current_team, int participants) {
+	ofstream teams_serialize("teams-serialize.txt", ios::app);
+
+	teams_serialize << participants << endl << current_team;
+	teams_serialize.close();
+}
+
+void AddNewTeam() {
+	ShowAllEmployees();
+	cout << "Enter team leader : ";
+	string team_leader;
+	getline(cin, team_leader);
+	cout << "Enter project name : ";
+	string project_name;
+	getline(cin, project_name);
+	cout << "---Adding members to team---" << endl;
+	vector<string> participants;
+	AddParticipantsToCurrentTeam(participants);
+
+	Teams current_team(team_leader, project_name, participants);
+	teams_arr.push_back(current_team);
+
+	SerializeObjectTeams(current_team, participants.size());
+}
+
+
+void ShowInformationForAllTeams() {
+	cout << endl << "----------INFORMATION FOR ALL TEAMS----------" << endl << endl;
+	for (size_t i = 0; i < teams_arr.size(); i++)
+	{
+		cout << teams_arr[i].GetInformation() << endl;
+	}
+}
+
 int main() {
 
 	/*typedef Employee * employees;
@@ -557,7 +694,8 @@ int main() {
 			<< "4 - Show information for employees" << endl
 			<< "5 - Fire employee" << endl
 			<< "6 - Show information for employees for certain position" << endl
-			<< "7 - Change employee's data" << endl << endl;
+			<< "7 - Change employee's data" << endl
+			<< "0 - Go to team menu" << endl;
 
 		cin >> operation;
 		cin.ignore();
@@ -591,6 +729,25 @@ int main() {
 		}
 
 	} while (operation != 0);
+
+	LoadInformationForTeams();
+	do {
+		cout << "---------TEAM MENU----------" << endl << endl;
+		cout << "1 - Create new team" << endl
+			<< "2 - Transfer members from one team to another" << endl
+			<< "3 - Delete team" << endl
+			<< "4 - Show information for all teams" << endl
+			<< "0 - Exit" << endl;
+
+		cin >> operation;
+		cin.ignore();
+
+		switch (operation) {
+		case 1: AddNewTeam(); break;
+		case 4: ShowInformationForAllTeams(); break;
+		}
+	} while (operation != 0);
+
 	system("pause");
 
 }
