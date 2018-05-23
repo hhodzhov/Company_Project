@@ -34,7 +34,14 @@ string Teams::GetInformation()
 
 vector<string> Teams::GetMembers()
 {
+	//names_of_employees.push_back(team_leader);
+
 	return this->names_of_employees;
+}
+
+string Teams::GetTeamLeader() const
+{
+	return this->team_leader;
 }
 
 bool Teams::isNull()

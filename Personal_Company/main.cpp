@@ -585,9 +585,36 @@ void ShowAllEmployees() {
 	ShowAnalysts();
 	ShowLeaders();
 }
+vector<string> GetAllBusyEmployees() {
+	vector<string> all_busy_employees;
+
+	for (size_t i = 0; i < teams_arr.size(); i++)
+	{
+		vector<string> current_team_employees = teams_arr[i].GetMembers();
+		current_team_employees.push_back(teams_arr[i].GetTeamLeader());
+		for (size_t j = 0; j < current_team_employees.size(); j++)
+		{
+			all_busy_employees.push_back(current_team_employees[j]);
+		}
+	}
+	return all_busy_employees;
+}
+
+
+
+bool IsAlreadyInSomeTeam(string employee) {
+	
+	vector<string> all_busy_ones = GetAllBusyEmployees();
+	for (size_t i = 0; i < all_busy_ones.size(); i++)
+	{
+		if (employee == all_busy_ones[i]) {
+			return true;
+		}
+	}
+	return false;
+}
 
 void AddParticipantsToCurrentTeam(vector<string>& members) {
-
 	cout << "Enter employee name : ";
 	string to_add;
 
@@ -596,13 +623,19 @@ void AddParticipantsToCurrentTeam(vector<string>& members) {
 	while (stay_in) {
 
 		getline(cin, to_add);
-		if (to_add == "end") {
-			stay_in = false;
+		if (IsAlreadyInSomeTeam(to_add)) {
+			cout << "Selected employee already participates in one of the teams, please select other employee!" << endl;
 		}
 		else {
-			members.push_back(to_add);
-			//getline(cin, to_add);
+			if (to_add == "end") {
+				stay_in = false;
+			}
+			else {
+				members.push_back(to_add);
+				//getline(cin, to_add);
+			}
 		}
+
 	}
 	/*cout << "Enter 'next' to continue or 'end' to stop" << endl;
 	cin >> end;
@@ -636,11 +669,36 @@ void SerializeObjectTeams(Teams& current_team, int participants) {
 	teams_serialize.close();
 }
 
+
+void ShowAllEmployeesWhichAreNotMemberOfTeams() {
+	cout << "----------All employees which are already in some team and you cannot choose them----------" << endl << endl;
+	vector<string> all_employees = GetAllEmployees();
+	vector<string> all_busy_employees = GetAllBusyEmployees();
+
+	for (size_t i = 0; i < all_busy_employees.size(); i++)
+	{
+		cout << all_busy_employees[i] << endl;
+	}
+
+}
+
 void AddNewTeam() {
+
 	ShowAllEmployees();
+	ShowAllEmployeesWhichAreNotMemberOfTeams();
+	cout << "FOR EXIT ENTER 'end'" << endl << endl;
+
 	cout << "Enter team leader : ";
 	string team_leader;
 	getline(cin, team_leader);
+	if (team_leader == "end") {
+		return;
+	}
+	bool exit = false;
+	while (IsAlreadyInSomeTeam(team_leader)) {
+		cout << "Selected employee is already member of some team, please select other employee" << endl;
+		getline(cin, team_leader);
+	}
 	cout << "Enter project name : ";
 	string project_name;
 	getline(cin, project_name);
