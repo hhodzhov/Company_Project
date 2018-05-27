@@ -24,6 +24,9 @@ public:
 	friend ostream& operator << (ostream& stream, const Teams& team);
 	friend istream& operator >> (istream& stream, Teams& team);
 	bool isNull();
+	void push_new_employee(string name);
+	void RemoveEmployee(string name);
+	bool HasNoMembers();
 		
 };
 

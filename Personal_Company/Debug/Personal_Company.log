@@ -1,4 +1,4 @@
-﻿Build started 5/23/2018 4:43:49 PM.
+﻿Build started 5/27/2018 9:56:13 PM.
 Project "C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Personal_Company\Personal_Company.vcxproj" on node 2 (Build target(s)).
 InitializeBuildStatus:
   Creating "Debug\Personal_Company.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -22,4 +22,4 @@ Done Building Project "C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Pers
 
 Build succeeded.
 
-Time Elapsed 00:00:01.00
+Time Elapsed 00:00:01.06

@@ -49,6 +49,21 @@ bool Teams::isNull()
 	return team_leader == "";
 }
 
+void Teams::push_new_employee(string name)
+{
+	this->names_of_employees.push_back(name);
+}
+
+void Teams::RemoveEmployee(string name)
+{
+	names_of_employees.erase(std::remove(names_of_employees.begin(), names_of_employees.end(), name));
+}
+
+bool Teams::HasNoMembers()
+{
+	return names_of_employees.empty();
+}
+
 ostream & operator<<(ostream & stream, const Teams & team)
 {
 	stream << team.team_leader << endl << team.project_name << endl;

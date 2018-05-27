@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<algorithm>
 #include"Employee.h"
 #include"Company.h"
 #include"Teams.h"
@@ -577,10 +578,7 @@ void ShowLeaders() {
 void ShowAllEmployees() {
 	vector<string> all_employees = GetAllEmployees();
 	cout << "----------All employees in the company----------" << endl << endl;
-	/*	for (size_t i = 0; i < all_employees.size(); i++)
-		{
-			cout << all_employees[i] << endl;
-		}*/
+	
 	ShowProgrammers();
 	ShowAnalysts();
 	ShowLeaders();
@@ -599,7 +597,6 @@ vector<string> GetAllBusyEmployees() {
 	}
 	return all_busy_employees;
 }
-
 
 
 bool IsAlreadyInSomeTeam(string employee) {
@@ -637,15 +634,6 @@ void AddParticipantsToCurrentTeam(vector<string>& members) {
 		}
 
 	}
-	/*cout << "Enter 'next' to continue or 'end' to stop" << endl;
-	cin >> end;
-	if (end == "end") {
-		stay_in = false;
-	}
-	else {
-		members.push_back(to_add);
-		getline(cin, to_add);
-	}*/
 }
 void LoadInformationForTeams() {
 	ifstream deserialize_teams("teams-serialize.txt");
@@ -717,8 +705,84 @@ void ShowInformationForAllTeams() {
 	cout << endl << "----------INFORMATION FOR ALL TEAMS----------" << endl << endl;
 	for (size_t i = 0; i < teams_arr.size(); i++)
 	{
-		cout << teams_arr[i].GetInformation() << endl;
+		cout << "TEAM "<<i+1<<endl<< teams_arr[i].GetInformation() << endl;
 	}
+}
+void ReserializeTeams() {
+	//deleting all content of the file in order to rewrite with updated data
+	ofstream teams_reserialize("teams-serialize.txt", ios:: out);
+
+	for (size_t i = 0; i < teams_arr.size(); i++)
+	{
+		int number_of_current_participants = teams_arr[i].GetMembers().size();
+		SerializeObjectTeams(teams_arr[i], number_of_current_participants);
+	}
+
+}
+
+void MoveEmployeeToOtherTeam(string name, int source, int destination) {
+	
+	teams_arr[destination - 1].push_new_employee(name);
+	vector<string> members_of_destination_team = teams_arr[destination-1].GetMembers();
+
+	teams_arr[source - 1].RemoveEmployee(name);
+	vector<string> members_of_source_team = teams_arr[source - 1].GetMembers();
+
+
+	/*cout << "Members in dest teams" << endl;
+	for (size_t i = 0; i < members_of_destination_team.size(); i++)
+	{
+		cout << members_of_destination_team[i] << endl;
+	}
+
+	cout << "Members in source team" << endl;
+	for (size_t i = 0; i < members_of_source_team.size(); i++)
+	{
+		cout << members_of_source_team[i] << endl;
+	}*/
+
+	ReserializeTeams();
+}
+
+void TransferMembers() {
+	ShowInformationForAllTeams();
+	cout << "-----From which team you want to transfer? Enter number of the team-----" << endl;
+	int team_number_from;
+	cin >> team_number_from;
+	cout << "-----Enter the name of employee you want to transfer-----" << endl;
+	string name_of_employee;
+	cin >> name_of_employee;
+	cout << "-----To which team you want to transfer the selected employee? Enter number of the team-----" << endl;
+	int team_number_to;
+	cin >> team_number_to;
+
+	MoveEmployeeToOtherTeam(name_of_employee, team_number_from, team_number_to);
+
+}
+
+void DeleteTeams() {
+	//ShowInformationForAllTeams();
+	cout << "----------Deleting Team----------" << endl;
+	cout << "Before deleting a team, you should transfer all members to other teams!" << endl;
+	cout << "Enter team number of the team you want to delete: ";
+	int number_of_team_to_delete;
+	cin >> number_of_team_to_delete;
+	while (!teams_arr[number_of_team_to_delete - 1].HasNoMembers()) {
+		TransferMembers();
+	}
+
+	cout << "Transferring team leader from this team" << endl;
+	cout << "Enter to which team you want to transfer the team leader: ";
+	string name_of_team_leader = teams_arr[number_of_team_to_delete - 1].GetTeamLeader();
+	int to_which_team;
+	cin >> to_which_team;
+
+	teams_arr[to_which_team - 1].push_new_employee(name_of_team_leader);
+	teams_arr.erase(teams_arr.begin() + (number_of_team_to_delete-1));
+
+	ReserializeTeams();
+
+
 }
 
 int main() {
@@ -772,20 +836,7 @@ int main() {
 			ShowInformationForEmployeesForCertainPosition(); break;
 		case 7:
 			ChangeEmployeesData(); break;
-		case 8:
-			cout << "Printing current Analyst" << endl;
-			for (size_t i = 0; i < analysts.size(); i++)
-			{
-				cout << analysts[i] << endl;
-			} break;
-		case 9:
-			cout << "Printing current Analyst_Arr" << endl;
-			for (size_t i = 0; i < analyst_arr.size(); i++)
-			{
-				cout << analyst_arr[i] << endl;
-			}break;
 		}
-
 	} while (operation != 0);
 
 	LoadInformationForTeams();
@@ -802,6 +853,8 @@ int main() {
 
 		switch (operation) {
 		case 1: AddNewTeam(); break;
+		case 2: TransferMembers(); break;
+		case 3: DeleteTeams(); break;
 		case 4: ShowInformationForAllTeams(); break;
 		}
 	} while (operation != 0);
