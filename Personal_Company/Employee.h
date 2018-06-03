@@ -34,9 +34,7 @@ public:
 		position_name(_position_name),
 		level(_level) {}
 	Employee();
-
-	virtual void AddNewEmployee() = 0;
-	virtual void FireEmployee() = 0;
+	
 	virtual string GetInformation() const {
 		ostringstream stream;
 		stream << "Full name : " << full_name << endl << "Address : " << address << endl << "EGN: " << egn << endl
@@ -44,10 +42,11 @@ public:
 			<< endl << "Level : " << level << endl;
 		return stream.str();
 	}
-	virtual void ChangeInformation() = 0;
+
 	virtual void SetLevel(string _level) = 0;
 	virtual string GetLevel()  const = 0;
 	virtual string GetName() const = 0;
+	virtual bool IsNull() = 0;
 };
 
 class Leader : public virtual Employee {
@@ -60,15 +59,13 @@ public:
 		string level, string _projectname, string mails);
 	Leader();
 	string GetInformation() const override;
-	void AddNewEmployee();
-	void FireEmployee();
-	void ChangeInformation() override;
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
 	string GetName() const override;
 	friend ostream & operator << (ostream& out, const Leader& leader);
 	friend istream & operator >> (istream& in, Leader& leader);
 	bool operator != (Leader& other);
+	bool IsNull() override;
 };
 class Programmer : public virtual Employee {
 	string project_name;
@@ -81,15 +78,13 @@ public:
 	string GetInformation() const override;
 	void SetProjectName(string name_of_project);
 	string GetProjectName();
-	void AddNewEmployee() override;
-	void FireEmployee() override;
-	void ChangeInformation() override;
 	void SetLevel(string _level) override;
 	string GetLevel() const override;
 	string GetName() const override;
 	friend ostream & operator << (ostream& out, const Programmer& programmer);
 	friend istream & operator >> (istream& in, Programmer& programmer);
 	bool operator != (Programmer& other);
+	bool IsNull() override;
 };
 
 class Analyst : public virtual Employee {
@@ -107,15 +102,13 @@ public:
 	void SetProjectName(string name_of_project);
 	void SetMailsOfClients(string mails);
 	string GetMailsOfClients() const;
-	void AddNewEmployee();
-	void FireEmployee();
-	void ChangeInformation();
 	void SetLevel(string _level);
 	string GetLevel() const;
 	string GetName() const override;
 	friend ostream & operator << (ostream& out, const Analyst& analyst);
 	friend istream & operator >> (istream& in, Analyst& analyst);
 	bool operator != (Analyst& other);
+	bool IsNull() override;
 };
 
 #endif // !PERSONAL_COMPANY

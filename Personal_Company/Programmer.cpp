@@ -31,17 +31,6 @@ string Programmer::GetProjectName()
 	return this->project_name;
 }
 
-void Programmer::AddNewEmployee()
-{
-}
-
-void Programmer::FireEmployee()
-{
-}
-
-void Programmer::ChangeInformation()
-{
-}
 
 void Programmer::SetLevel(string _level)
 {
@@ -63,5 +52,10 @@ bool Programmer::operator!=(Programmer & other)
 	return this->full_name != other.full_name && this->address != other.address && this->egn != other.egn
 		&& this->hire_date != other.hire_date && this->boss != other.boss  && this->position_name != other.position_name
 		&& this->level != other.level && this->project_name != other.project_name;
+}
+
+bool Programmer::IsNull()
+{
+	return full_name == "";
 }
 

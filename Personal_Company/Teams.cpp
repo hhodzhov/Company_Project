@@ -3,13 +3,16 @@
 #include<vector>
 #include<algorithm>
 #include<sstream>
+#include<fstream>
 #include "Teams.h"
+
 using namespace std;
 
 Teams::Teams() : 
 	team_leader(""),
 	project_name(""),
 	names_of_employees(NULL)
+	
 {
 }
 
@@ -34,8 +37,6 @@ string Teams::GetInformation()
 
 vector<string> Teams::GetMembers()
 {
-	//names_of_employees.push_back(team_leader);
-
 	return this->names_of_employees;
 }
 
@@ -63,6 +64,7 @@ bool Teams::HasNoMembers()
 {
 	return names_of_employees.empty();
 }
+
 
 ostream & operator<<(ostream & stream, const Teams & team)
 {

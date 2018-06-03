@@ -7,16 +7,17 @@
 #include<algorithm>
 #include<ostream>
 #include<istream>
+
 using namespace std;
 
 class Teams {
 	string team_leader;
 	string project_name;
 	vector<string> names_of_employees;
-	
 
 public:
 	Teams();
+	
 	Teams(string _team_leader, string _project_name, vector<string> _names_of_employees);
 	string GetInformation();
 	vector<string> GetMembers();

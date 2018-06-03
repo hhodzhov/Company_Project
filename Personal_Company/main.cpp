@@ -6,8 +6,9 @@
 #include"Teams.h"
 using namespace std;
 
-static Company company;
-vector<Analyst> analysts;
+Company company;
+
+
 static vector<Analyst> analyst_arr;
 static vector<Leader> leader_arr;
 static vector<Programmer> programmer_arr;
@@ -35,26 +36,11 @@ void EnterInformationForCompany() {
 void GetInformationForCompany() {
 	cout << company.GetInformationForCompany() << endl;
 }
-/*
-void StoreInformationForAnalysts(string name, string address, string egn, string date,
-	string boss, string position, string level, string project, string mails) {
 
-	ofstream analysts_information("analysts-information.txt", ios::app);
-	analysts_information << "Full Name : " << name << endl;
-	analysts_information << "Address : " << address << endl;
-	analysts_information << "EGN : " << egn << endl;
-	analysts_information << "Date of hiring : " << date << endl;
-	analysts_information << "Boss : " << boss << endl;
-	analysts_information << "Position : " << position << endl;
-	analysts_information << "Level : " << level << endl;
-	analysts_information << "Project name : " << project << endl;
-	analysts_information << "Mails of clients : " << mails << endl << endl;
-}
-*/
 void SerializeObjectAnalyst(Analyst & analyst) {
 	ofstream analyst_serialize("analyst-serialize.txt", ios::app);
 
-	analyst_serialize << endl << analyst;
+	analyst_serialize << analyst;
 	analyst_serialize.close();
 }
 
@@ -85,12 +71,9 @@ void HireAnalyst() {
 	getline(cin, mails);
 
 	Analyst current_analyst(name, address, egn, date, boss, position, level, project, mails);
-	//analysts.push_back(current_analyst);
 	analyst_arr.push_back(current_analyst);
 
 	SerializeObjectAnalyst(current_analyst);
-
-	//StoreInformationForAnalysts(name, address, egn, date, boss, position, level, project, mails);
 
 }
 void SerializeObjectLeader(Leader& leader) {
@@ -128,6 +111,7 @@ void HireProgrammer() {
 	SerializeObjectProgrammer(current_programmer);
 }
 void AddEmployeeToStuff() {
+
 	cout << "-----What kind of employee do you want to hire-----" << endl << endl;
 	cout << "1 - Analyst" << endl
 		<< "2 - Programmer" << endl
@@ -158,7 +142,13 @@ void LoadAnalysts() {
 	while (!deserialize_analyst.eof()) {
 		Analyst current;
 		deserialize_analyst >> current;
-		analyst_arr.push_back(current);
+
+		if (!current.IsNull()) {
+			analyst_arr.push_back(current);
+		}
+		else {
+			break;
+		}
 
 	}
 }
@@ -167,7 +157,14 @@ void LoadLeaders() {
 	while (!deserialize_leaders.eof()) {
 		Leader current;
 		deserialize_leaders >> current;
-		leader_arr.push_back(current);
+
+		if (!current.IsNull()) {
+			leader_arr.push_back(current);
+		}
+		else {
+			break;
+		}
+		
 	}
 }
 
@@ -176,7 +173,14 @@ void LoadProgrammers() {
 	while (!deserialize_programmers.eof()) {
 		Programmer current;
 		deserialize_programmers >> current;
-		programmer_arr.push_back(current);
+
+		if (!current.IsNull()) {
+			programmer_arr.push_back(current);
+		}
+		else {
+			break;
+		}
+		
 	}
 }
 void LoadInformation() {
@@ -196,31 +200,9 @@ void ShowAllAnalystsInformation() {
 		cout << analyst_arr[i].GetInformation() << endl;
 	}
 }
-void MoveToAnalystArr() {
-	int count;
-	for (size_t i = 0; i < analysts.size(); i++)
-	{
-		count = 0;
-		for (size_t j = 0; j < analyst_arr.size(); j++)
-		{
-			if (analyst_arr[j] != analysts[i]) {
-				count++;
-			}
-		}
-		cout << "Count is : " << count << endl;
-		cout << "Analyst_arr.size() is " << analyst_arr.size() << endl;
-		cout << "Vec size is : " << analysts.size() << endl;
-		if (count == analyst_arr.size() - 1) {
-			analyst_arr.push_back(analysts[i]);
-		}
-	}
-}
+
 void DeserializeObjectAnalyst() {
 
-	/*if (analysts.size() != 0) {
-		cout << "ASDASDASDASD";
-		MoveToAnalystArr();
-	}*/
 	ShowAllAnalystsInformation();
 }
 void ShowAllLeadersInformation() {
@@ -256,7 +238,6 @@ void ShowInformationForEmployeesForCertainPosition() {
 	case 3:
 		DeserializeObjectLeader(); break;
 	}
-
 }
 void ShowInfoForSelectedAnalyst(string& selected) {
 	for (size_t i = 0; i < analyst_arr.size(); i++)
@@ -332,11 +313,9 @@ void ShowInformationForCertainEmployee() {
 	size_t operation;
 	cin >> operation;
 	switch (operation) {
-	case 1:
-		ShowInformationForCertainAnalyst(); break;
+	case 1: ShowInformationForCertainAnalyst(); break;
 	case 2: ShowInformationForCertainProgrammer(); break;
-	case 3:
-		ShowInformationForCertainLeader(); break;
+	case 3: ShowInformationForCertainLeader(); break;
 	}
 }
 void ReSerializeAnalysts(vector<Analyst> vec, string file_name) {
@@ -344,13 +323,8 @@ void ReSerializeAnalysts(vector<Analyst> vec, string file_name) {
 
 	for (size_t i = 0; i < vec.size(); i++)
 	{
-		if (i == vec.size() - 1) {
-			reserialize_employees << vec[i];
-		}
-		else {
-			reserialize_employees << vec[i] << endl;
-
-		}
+		reserialize_employees << vec[i];
+		
 	}
 }
 void FireAnalysts() {
@@ -424,11 +398,9 @@ void FireEmployees() {
 	size_t operation;
 	cin >> operation;
 	switch (operation) {
-	case 1:
-		FireAnalysts(); break;
+	case 1: FireAnalysts(); break;
 	case 2: FireProgrammers(); break;
-	case 3:
-		FireLeaders(); break;
+	case 3: FireLeaders(); break;
 	}
 }
 Analyst ChangedAnalystInformation(Analyst& current_analyst) {
@@ -525,14 +497,10 @@ void ChangeEmployeesData() {
 		ChangeProgrammersData(); break;
 	case 3:
 		ChangeLeadersData(); break;
+		//company.ChangeLeaderData(); break;
 	}
 }
 
-
-
-//TODO :: you can make global variable in main.cpp vector<Employee> employees_arr, and in every adding
-//add current type of employee in this variable
-//then in this function just employees_arr[i].GetName() i vsichko tochno
 vector<string> GetAllEmployees() {
 	vector<string> all;
 	for (size_t i = 0; i < analyst_arr.size(); i++)
@@ -578,7 +546,7 @@ void ShowLeaders() {
 void ShowAllEmployees() {
 	vector<string> all_employees = GetAllEmployees();
 	cout << "----------All employees in the company----------" << endl << endl;
-	
+
 	ShowProgrammers();
 	ShowAnalysts();
 	ShowLeaders();
@@ -600,7 +568,7 @@ vector<string> GetAllBusyEmployees() {
 
 
 bool IsAlreadyInSomeTeam(string employee) {
-	
+
 	vector<string> all_busy_ones = GetAllBusyEmployees();
 	for (size_t i = 0; i < all_busy_ones.size(); i++)
 	{
@@ -629,7 +597,6 @@ void AddParticipantsToCurrentTeam(vector<string>& members) {
 			}
 			else {
 				members.push_back(to_add);
-				//getline(cin, to_add);
 			}
 		}
 
@@ -705,12 +672,12 @@ void ShowInformationForAllTeams() {
 	cout << endl << "----------INFORMATION FOR ALL TEAMS----------" << endl << endl;
 	for (size_t i = 0; i < teams_arr.size(); i++)
 	{
-		cout << "TEAM "<<i+1<<endl<< teams_arr[i].GetInformation() << endl;
+		cout << "TEAM " << i + 1 << endl << teams_arr[i].GetInformation() << endl;
 	}
 }
 void ReserializeTeams() {
 	//deleting all content of the file in order to rewrite with updated data
-	ofstream teams_reserialize("teams-serialize.txt", ios:: out);
+	ofstream teams_reserialize("teams-serialize.txt", ios::out);
 
 	for (size_t i = 0; i < teams_arr.size(); i++)
 	{
@@ -721,25 +688,12 @@ void ReserializeTeams() {
 }
 
 void MoveEmployeeToOtherTeam(string name, int source, int destination) {
-	
+
 	teams_arr[destination - 1].push_new_employee(name);
-	vector<string> members_of_destination_team = teams_arr[destination-1].GetMembers();
+	vector<string> members_of_destination_team = teams_arr[destination - 1].GetMembers();
 
 	teams_arr[source - 1].RemoveEmployee(name);
 	vector<string> members_of_source_team = teams_arr[source - 1].GetMembers();
-
-
-	/*cout << "Members in dest teams" << endl;
-	for (size_t i = 0; i < members_of_destination_team.size(); i++)
-	{
-		cout << members_of_destination_team[i] << endl;
-	}
-
-	cout << "Members in source team" << endl;
-	for (size_t i = 0; i < members_of_source_team.size(); i++)
-	{
-		cout << members_of_source_team[i] << endl;
-	}*/
 
 	ReserializeTeams();
 }
@@ -778,7 +732,7 @@ void DeleteTeams() {
 	cin >> to_which_team;
 
 	teams_arr[to_which_team - 1].push_new_employee(name_of_team_leader);
-	teams_arr.erase(teams_arr.begin() + (number_of_team_to_delete-1));
+	teams_arr.erase(teams_arr.begin() + (number_of_team_to_delete - 1));
 
 	ReserializeTeams();
 
@@ -787,25 +741,8 @@ void DeleteTeams() {
 
 int main() {
 
-	/*typedef Employee * employees;
-	vector<string> mails;
-	mails.push_back("firstmail");
-	mails.push_back("secondmail");
-
-	employees e[3]{
-		new Programmer("Halmi Saliev Hodzhov", "Sofia", "9705245081", "15.05.2018", "Az sym si shefa", "Programmer", "1", "Company Project"),
-		new Analyst("Mesut Saliev Hodzhov","Varna","11111111","12.12.12","Toi e shefa","Analyst","2","Some project",mails),
-		new Leader("Sali Ahmed Hodzhov","Razgrad","2222222222","13.12.13","Toi e shefa","Leader","3","Some project",mails)
-	};
-
-	for (size_t i = 0; i < 3; i++)
-	{
-		cout << e[i]->GetInformation() << endl;
-	}
-	cout << endl;
-	*/
 	size_t operation;
-	//DeserializeObjectAnalyst();
+
 	LoadInformation();
 
 	do {
@@ -852,7 +789,7 @@ int main() {
 		cin.ignore();
 
 		switch (operation) {
-		case 1: AddNewTeam(); break;
+		case 1:  AddNewTeam(); break;
 		case 2: TransferMembers(); break;
 		case 3: DeleteTeams(); break;
 		case 4: ShowInformationForAllTeams(); break;
@@ -860,5 +797,4 @@ int main() {
 	} while (operation != 0);
 
 	system("pause");
-
 }

@@ -25,18 +25,6 @@ string Leader::GetInformation() const
 	return stream.str();
 }
 
-void Leader::AddNewEmployee()
-{
-}
-
-void Leader::FireEmployee()
-{
-}
-
-void Leader::ChangeInformation()
-{
-}
-
 void Leader::SetLevel(string _level)
 {
 	level = _level;
@@ -57,4 +45,9 @@ bool Leader::operator!=(Leader & other)
 	return this->full_name != other.full_name && this->address != other.address && this->egn != other.egn
 		&& this->hire_date != other.hire_date && this->boss != other.boss  && this->position_name != other.position_name
 		&& this->level != other.level && this->project_name != other.project_name && this->mails_of_clients != other.mails_of_clients;
+}
+
+bool Leader::IsNull()
+{
+	return full_name == "";
 }

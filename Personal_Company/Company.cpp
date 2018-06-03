@@ -4,6 +4,7 @@
 using std::ostringstream;
 using std::endl;
 using std::ifstream;
+
 Company::Company():
 	name_of_company(""),
 	ceo_of_company(""),
