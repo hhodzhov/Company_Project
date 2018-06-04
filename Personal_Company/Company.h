@@ -3,14 +3,8 @@
 #define COMPANY
 #include<string>
 #include"Employee.h"
-#include"Teams.h"
+
 using namespace std;
-
-
-static vector<Analyst> analyst_arr1;
-static vector<Leader> leader_arr1;
-static vector<Programmer> programmer_arr1;
-static vector<Teams> teams_arr1;
 
 
 class Company {

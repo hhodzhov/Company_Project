@@ -112,15 +112,17 @@
   <ItemGroup>
     <ClInclude Include="Company.h" />
     <ClInclude Include="Employee.h" />
+    <ClInclude Include="Executor.h" />
     <ClInclude Include="Teams.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Analyst.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Company.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="Leader.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Programmer.cpp" />
+    <ClCompile Include="Executor.cpp" />
     <ClCompile Include="Teams.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

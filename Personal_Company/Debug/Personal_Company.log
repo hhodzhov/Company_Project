@@ -1,28 +1,20 @@
-﻿Build started 6/3/2018 11:58:56 PM.
+﻿Build started 6/4/2018 4:28:30 PM.
 Project "C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Personal_Company\Personal_Company.vcxproj" on node 2 (Build target(s)).
 InitializeBuildStatus:
   Creating "Debug\Personal_Company.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Analyst.cpp Company.cpp Employee.cpp Leader.cpp Main.cpp Programmer.cpp Teams.cpp
-  Teams.cpp
-  Programmer.cpp
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Executor.cpp Main.cpp
   Main.cpp
-  Leader.cpp
-  Analyst.cpp
-c:\users\halmi\documents\visual studio 2015\projects\personal_company\company_project\personal_company\analyst.cpp(36): warning C4018: '<': signed/unsigned mismatch
+  Executor.cpp
   Generating Code...
-  Compiling...
-  Company.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  Employee.cpp
 Link:
   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Debug\Personal_Company.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Debug\Personal_Company.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Debug\Personal_Company.lib" /MACHINE:X86 Debug\Analyst.obj
+  Debug\Main.obj
   Debug\Company.obj
   Debug\Employee.obj
   Debug\Leader.obj
-  Debug\Main.obj
   Debug\Programmer.obj
+  Debug\Executor.obj
   Debug\Teams.obj
   Personal_Company.vcxproj -> C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Debug\Personal_Company.exe
   Personal_Company.vcxproj -> C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Personal_Company\Company_Project\Debug\Personal_Company.pdb (Partial PDB)
@@ -33,4 +25,4 @@ Done Building Project "C:\Users\Halmi\Documents\Visual Studio 2015\Projects\Pers
 
 Build succeeded.
 
-Time Elapsed 00:00:03.62
+Time Elapsed 00:00:01.52
